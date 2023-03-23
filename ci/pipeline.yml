@@ -1,4 +1,4 @@
-# concourse-docker-deploy-resource pipeline.yml
+# concourse-deploy-docker-resource pipeline.yml
 
 #------------------------------------------------------------------------------------------
 jobs:
@@ -9,36 +9,36 @@ jobs:
   plan:
 
     # GET REPO FROM GITHUB
-    - get: concourse-docker-deploy-resource
+    - get: concourse-deploy-docker-resource
       trigger: true
     # SEND SLACK ALERT  
     - put: resource-slack-alert
       params:
         channel: '#jeff-builds'
-        text: "From concourse-docker-deploy-resource: STARTED job-readme-github-pages in concourse ci."
+        text: "From concourse-deploy-docker-resource: STARTED job-readme-github-pages in concourse ci."
     # SEND GITHUB STATUS
     - put: resource-repo-status
-      params: { state: "pending", description: "STARTED job-readme-github-pages in concourse ci.", commit: "concourse-docker-deploy-resource" }    
+      params: { state: "pending", description: "STARTED job-readme-github-pages in concourse ci.", commit: "concourse-deploy-docker-resource" }    
     
     # RUN TASK IN REPO USING ALPINE DOCKER IMAGE
     - task: task-readme-github-pages
-      file: concourse-docker-deploy-resource/ci/tasks/task-readme-github-pages.yml
+      file: concourse-deploy-docker-resource/ci/tasks/task-readme-github-pages.yml
       
       # TASK SUCCESS
       on_success:
         do:
           # PUSH NEW REPO TO GITHUB
-          - put: concourse-docker-deploy-resource
+          - put: concourse-deploy-docker-resource
             params:
-              repository: concourse-docker-deploy-resource-updated  
+              repository: concourse-deploy-docker-resource-updated  
           # SEND SLACK ALERT  
           - put: resource-slack-alert
             params:
               channel: '#jeff-builds'
-              text: "From concourse-docker-deploy-resource: PASSED job-readme-github-pages in concourse ci."
+              text: "From concourse-deploy-docker-resource: PASSED job-readme-github-pages in concourse ci."
           # SEND GITHUB STATUS
           - put: resource-repo-status
-            params: { state: "success", description: "PASSED job-readme-github-pages in concourse ci", commit: "concourse-docker-deploy-resource" }
+            params: { state: "success", description: "PASSED job-readme-github-pages in concourse ci", commit: "concourse-deploy-docker-resource" }
       
       # TASK FAILURE   
       on_failure:
@@ -47,10 +47,10 @@ jobs:
           - put: resource-slack-alert
             params:
               channel: '#jeff-builds'
-              text: "From concourse-docker-deploy-resource: FAILED job-readme-github-pages in concourse ci."
+              text: "From concourse-deploy-docker-resource: FAILED job-readme-github-pages in concourse ci."
           # SEND GITHUB STATUS
           - put: resource-repo-status
-            params: { state: "failure", description: "FAILED job-readme-github-pages in concourse ci", commit: "concourse-docker-deploy-resource" }
+            params: { state: "failure", description: "FAILED job-readme-github-pages in concourse ci", commit: "concourse-deploy-docker-resource" }
 
 #**********************************************
 - name: job-build-push
@@ -58,21 +58,21 @@ jobs:
   plan:
 
     # GET REPO FROM GITHUB
-    - get: concourse-docker-deploy-resource
+    - get: concourse-deploy-docker-resource
       trigger: true
       passed: [job-readme-github-pages]
     # SEND SLACK ALERT  
     - put: resource-slack-alert
       params:
         channel: '#jeff-builds'
-        text: "From concourse-docker-deploy-resource: STARTED job-build-push in concourse ci."
+        text: "From concourse-deploy-docker-resource: STARTED job-build-push in concourse ci."
     # SEND GITHUB STATUS
     - put: resource-repo-status
-      params: { state: "pending", description: "STARTED job-build-push in concourse ci.", commit: "concourse-docker-deploy-resource" }
+      params: { state: "pending", description: "STARTED job-build-push in concourse ci.", commit: "concourse-deploy-docker-resource" }
 
     # RUN TASK IN REPO USING ALPINE DOCKER IMAGE 
     - task: task-build-push
-      file: concourse-docker-deploy-resource/ci/tasks/task-build-push.yml
+      file: concourse-deploy-docker-resource/ci/tasks/task-build-push.yml
 
     # PUSH DOCKER IMAGE TO DOCKERHUB  
     - put: resource-dump-to-dockerhub
@@ -85,10 +85,10 @@ jobs:
           - put: resource-slack-alert
             params:
               channel: '#jeff-builds'
-              text: "From concourse-docker-deploy-resource: PASSED job-build-push in concourse ci."
+              text: "From concourse-deploy-docker-resource: PASSED job-build-push in concourse ci."
           # SEND GITHUB STATUS
           - put: resource-repo-status
-            params: { state: "pending", description: "PASSED job-build-push in concourse ci.", commit: "concourse-docker-deploy-resource" }
+            params: { state: "pending", description: "PASSED job-build-push in concourse ci.", commit: "concourse-deploy-docker-resource" }
       
       # TASK FAILURE    
       on_failure:
@@ -97,10 +97,10 @@ jobs:
           - put: resource-slack-alert
             params:
               channel: '#jeff-builds'
-              text: "From concourse-docker-deploy-resource: FAILED job-build-push in concourse ci."
+              text: "From concourse-deploy-docker-resource: FAILED job-build-push in concourse ci."
           # SEND GITHUB STATUS
           - put: resource-repo-status
-            params: { state: "failure", description: "FAILED job-build-push in concourse ci.", commit: "concourse-docker-deploy-resource" }
+            params: { state: "failure", description: "FAILED job-build-push in concourse ci.", commit: "concourse-deploy-docker-resource" }
 
 #------------------------------------------------------------------------------------------
 resource_types:
@@ -120,12 +120,12 @@ resource_types:
 #------------------------------------------------------------------------------------------
 resources:
 
-  - name: concourse-docker-deploy-resource
+  - name: concourse-deploy-docker-resource
     type: git
     icon: github
     source:
-      #uri: https://github.com/jeffdecola/concourse-docker-deploy-resource
-      uri: git@github.com:jeffdecola/concourse-docker-deploy-resource.git
+      #uri: https://github.com/jeffdecola/concourse-deploy-docker-resource
+      uri: git@github.com:jeffdecola/concourse-deploy-docker-resource.git
       branch: main
       private_key: ((git_private_key))
 
@@ -133,7 +133,7 @@ resources:
     type: docker-image
     icon: docker
     source:
-      repository: jeffdecola/concourse-docker-deploy-resource
+      repository: jeffdecola/concourse-deploy-docker-resource
       tag: latest
       username: jeffdecola
       password: ((dockerhub_password))
@@ -148,5 +148,5 @@ resources:
     type: github-status
     icon: github
     source:
-      repository: jeffdecola/concourse-docker-deploy-resource 
+      repository: jeffdecola/concourse-deploy-docker-resource 
       access_token: ((repo_github_token))
