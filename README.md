@@ -10,7 +10,11 @@ _A concourse resource to deploy a docker image on a machine via ssh._
 
 Table of Contents
 
-* tbd
+Table of Contents
+
+* [OVERVIEW](https://github.com/JeffDeCola/concourse-deploy-docker-resource#overview)
+* [HOW TO USE](https://github.com/JeffDeCola/concourse-deploy-docker-resource#how-to-use)
+* [HOW I BUILT AND PUSHED THIS RESOURCE (REFERENCE)](https://github.com/JeffDeCola/concourse-deploy-docker-resource#how-i-built-and-pushed-this-resource-reference)
 
 Documentation and Reference
 
@@ -29,18 +33,9 @@ _A concourse resource to deploy a docker image on a machine via ssh._
 
 ## HOW TO USE
 
-Ho to setup your pipeline.
+To use this resource in your pipeline, you will need,
 
-To [set-pipeline.sh](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/test-this-resource/set-pipeline.sh)
-for concourse,
-
-```bash
-cd test-this-resource
-sh set-pipeline.sh.
-```
-
-Where the
-[pipeline.yml](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/test-this-resource/pipeline.yml),
+* {}
 
 ```yml
 #------------------------------------------------------------------------------------------
@@ -104,10 +99,7 @@ resources:
       source3: "source3 info"
 ```
 
-Note: You will need to put your `((git_private_key))` in a .credentials
-file in the root of this repo.
-
-## HOW I BUILT AND PUSHED THE RESOURCE (REFERENCE)
+## HOW I BUILT AND PUSHED THIS RESOURCE (REFERENCE)
 
 Refer to my
 [concourse-resource-template](https://github.com/JeffDeCola/concourse-resource-template)
