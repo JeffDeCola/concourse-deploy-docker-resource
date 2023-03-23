@@ -1,0 +1,20 @@
+# concourse-deploy-docker-resource task-readme-github-pages.yml
+
+platform: linux
+
+# DOCKER BASE IMAGE FOR TASKS (BASED ON ALPINE, A SMALLER LINUX DISTRIBUTION)
+image_resource:
+  type: docker-image
+  source:
+    repository: golang
+    tag: 1.20.1
+
+inputs:
+  - name: concourse-deploy-docker-resource
+
+outputs:
+  - name: concourse-deploy-docker-resource-updated
+
+run:
+  path: ./concourse-deploy-docker-resource/ci/scripts/readme-github-pages.sh
+  # args: [-debug]
