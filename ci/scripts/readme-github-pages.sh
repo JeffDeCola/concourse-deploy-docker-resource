@@ -69,9 +69,9 @@ echo "    Update the image links (remove docs/)"
 echo "    sed -i 's#IMAGE](docs/#IMAGE](#g' temp-README.md"
 sed -i 's#IMAGE](docs/#IMAGE](#g' temp-README.md
 echo "    Update the image links for svgs (if you have them)"
-echo "    Add \"https://raw.githubusercontent.com/JeffDeCola/REPONAME/master/svgs/\" to \"svgs/\""
-echo "    sed -i 's/svgs\//https:\/\/raw.githubusercontent.com\/JeffDeCola\/concourse-deploy-docker-resource\/master\/svgs\//g' temp-README.md"
-sed -i 's/svgs\//https:\/\/raw.githubusercontent.com\/JeffDeCola\/concourse-deploy-docker-resource\/master\/svgs\//g' temp-README.md
+echo "    Add \"https://raw.githubusercontent.com/JeffDeCola/REPONAME/main/svgs/\" to \"svgs/\""
+echo "    sed -i 's/svgs\//https:\/\/raw.githubusercontent.com\/JeffDeCola\/concourse-deploy-docker-resource\/main\/svgs\//g' temp-README.md"
+sed -i 's/svgs\//https:\/\/raw.githubusercontent.com\/JeffDeCola\/concourse-deploy-docker-resource\/main\/svgs\//g' temp-README.md
 echo " "
 
 echo "GIT COMMIT OR NOT ---------------------------------------------------------------------"
@@ -118,7 +118,7 @@ then
     git config --list
     echo " "
 
-    echo "GIT PUSH MASTER BRANCH ------------------------------------------------------------"
+    echo "GIT PUSH MAIN BRANCH ------------------------------------------------------------"
     echo " "
 
     echo "git add and commit what is needed to protect from unforseen issues"
