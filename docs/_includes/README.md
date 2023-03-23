@@ -1,237 +1,113 @@
+  _built with
+  [concourse](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/ci-README.md)_
 
-# USE EITHER BASH SCRIPT OR GO
+# OVERVIEW
 
-This resource type can use either bash script or go.
+_A concourse resource to deploy a docker image on a machine via ssh._
 
-Change _ci/Dockerfile_ to either ADD _/assets-go_ or _/assets-bash_.
+## HOW TO USE
 
-### USING BASH
+To use this resource in your pipeline, you will need,
 
-The 3 bash script files located in _/assets-bash_.
+* {}
 
-### USING GO (default)
-
-The 3 bash scripts are located in _/assets-go_ that run _main.go_ with
-the second argument being _check_, _in_ or _out_ respectively.
-Hence only one file _main.go_ need to be maintained, rather
-than three separate files.
-
-## SOURCE CONFIGURATION
-
-These are just placeholders that you can update where your source is.
-
-* `source1`: Just a placeholder.
-
-* `source2`: Just a placeholder.
-
-## BEHAVIOR
-
-### CHECK (a resource version(s))
-
-CHECK will mimic getting the list of versions from a resource.
-
-#### CHECK stdin
-
-```json
-{
-  "source": {
-    "source1": "sourcefoo1",
-    "source2": "sourcefoo2"
-  },
-  "version": {
-    "ref": "123 ",
-  }
-}
-```
-
-123 is the current version.
-
-#### CHECK stdout
-
-```json
-[
-  { "ref": "123" },
-  { "ref": "3de" },
-  { "ref": "456" }
-  { "ref": "777" }
-]
-```
-
-777 is the latest version that will be used.
-
-The last number 777 will become the current ref version that will be used by IN.
-
-#### CHECK - go run
-
-```bash
-echo '{
-"params": {"param1": "Hello Clif","param2": "Nice to meet you"},
-"source": {"source1": "sourcefoo1","source2": "sourcefoo2"},
-"version":{"ref": "123"}}' |
-go run main.go check $PWD
-```
-
-### IN (fetch a resource)
-
-IN will mimic fetching a resource and placing a file in the working directory.
-
-#### IN Parameters
-
-* `param1`: Just a placeholder.
-
-* `param2`: Just a placeholder.
-
-#### IN stdin
-
-```json
-{
-  "params": {
-    "param1": "Hello Clif",
-    "param2": "Nice to meet you"
-  },
-  "source": {
-    "source1": "sourcefoo1",
-    "source2": "sourcefoo2"
-  },
-  "version": {
-    "ref": "777",
-  }
-```
-
-#### IN stdout
-
-```json
-{
-  "version":{ "ref": "777" },
-  "metadata": [
-    { "name": "nameofmonkey", "value": "Larry" },
-    { "name": "author","value": "Jeff DeCola" }
-  ]
-}
-```
-
-#### file fetched (fetch.json)
-
-The IN will mimic a fetch and place a fake file `fetched.json` file
-in the working directory:
-
-#### IN - go run
-
-```bash
-echo '{
-"params": {"param1": "Hello Clif","param2": "Nice to meet you"},
-"source": {"source1": "sourcefoo1","source2": "sourcefoo2"},
-"version":{"ref": "777"}}' |
-go run main.go in $PWD
-```
-
-### OUT (update a resouce)
-
-OUT will mimic updating a resource.
-
-#### OUT Parameters
-
-* `param1`: Just a placeholder.
-
-* `param2`: Just a placeholder
-
-#### OUT stdin
-
-```json
-{
-  "params": {
-    "param1": "Hello Jeff",
-    "param2": "How are you?"
-  },
-  "source": {
-    "source1": "sourcefoo1",
-    "source2": "sourcefoo2"
-  },
-  "version": {
-    "ref": ""
-  }
-}
-```
-
-#### OUT stdout
-
-```json
-{
-  "version":{ "ref": "777" },
-  "metadata": [
-    { "name": "nameofmonkey","value": "Henry" },
-    { "name": "author","value": "Jeff DeCola" }
-  ]
-}
-```
-
-where 777 is the version you wanted to update.
-
-#### OUT - go run
-
-```bash
-echo '{
-"params": {"param1": "Hello Jeff","param2": "How are you?"},
-"source": {"source1": "sourcefoo1","source2": "sourcefoo2"},
-"version":{"ref": ""}}' |
-go run main.go out $PWD
-```
-
-## PIPELINE EXAMPLE USING PUT
-
-```yaml
+```yml
+#------------------------------------------------------------------------------------------
 jobs:
-...
-- name: your-job-name
+
+#**********************************************
+- name: job-test-concourse-deploy-docker-resource
+#**********************************************
   plan:
-    ...
-  - put: resource-template
-    params: { param1: "hello jeff", param2: "How are you?" }
 
+    # GET REPO FROM GITHUB
+    - get: concourse-deploy-docker-resource
+      trigger: true
+
+    # CONCOURSE RESOURCE TEMPLATE
+    - get: concourse-deploy-docker-resource-test
+      params:
+        param1: "get param1"
+        param2: "get param2"
+        param3: "get param3"
+
+    # RUN TASK IN REPO USING ALPINE DOCKER IMAGE
+    - task: task-test-concourse-deploy-docker-resource
+      file: concourse-deploy-docker-resource/test-this-resource/tasks/task-test-concourse-deploy-docker-resource.yml
+
+      # TASK SUCCESS
+      on_success:
+        do:
+          # CONCOURSE RESOURCE TEMPLATE
+          - put: concourse-deploy-docker-resource-test
+            params:
+              param1: "put param1"
+              param2: "put param2"
+              param3: "put param3"
+
+#------------------------------------------------------------------------------------------
 resource_types:
-  ...
-- name: jeffs-resource
-  type: docker-image
-  source:
-   repository: jeffdecola/resource-template
-   tag: latest
 
+  - name: jeffs-resource
+    type: docker-image
+    source:
+      repository: jeffdecola/concourse-deploy-docker-resource
+      tag: latest
+
+#------------------------------------------------------------------------------------------
 resources:
-  ...
-- name: resource-template
-  type: jeffs-resource
-  source:
-    source1: foo1
-    source1: foo2
+
+  - name: concourse-deploy-docker-resource
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:jeffdecola/concourse-deploy-docker-resource.git
+      branch: master
+      private_key: ((git_private_key))
+
+  - name: concourse-deploy-docker-resource-test
+    type: jeffs-resource
+    source:
+      source1: "source1 info"
+      source2: "source2 info"
+      source3: "source3 info"
 ```
 
-GET would look similiar.
+## HOW I BUILT AND PUSHED THIS RESOURCE (REFERENCE)
 
-## TESTED, BUILT & PUSHED TO DOCKERHUB USING CONCOURSE
+Refer to my
+[concourse-resource-template](https://github.com/JeffDeCola/concourse-resource-template)
+on how I built this resource.
 
-To automate the creation of the `resource-template` docker image, a concourse pipeline
-will,
+To
+[build.sh](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/build-resource-using-bash/build/build.sh)
+using the
+[Dockerfile](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/build-resource-using-bash/build/Dockerfile),
 
-* Update README.md for resource-template github webpage.
-* Unit Test the code.
-* Build the docker image `resource-template` and push to DockerHub.
+```bash
+cd build-resource-using-bash/build
+sh build-resource.sh
+```
 
-![IMAGE - resource-template concourse ci pipeline - IMAGE](pics/resource-template-pipeline.jpg)
+Note how a concourse base image is used to build the resource.
 
-As seen in the pipeline diagram, the _resource-dump-to-dockerhub_ uses
-the resource type
-[docker-image](https://github.com/concourse/docker-image-resource)
-to push a docker image to dockerhub.
+To
+[push.sh](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/build-resource-using-bash/push/push.sh)
+the resource docker image to dockerhub,
 
-`resource-template` also contains a few extra concourse resources:
+```bash
+cd build-resource-using-bash/push
+sh push.sh
+```
 
-* A resource (_resource-slack-alert_) uses a [docker image](https://hub.docker.com/r/cfcommunity/slack-notification-resource)
-  that will notify slack on your progress.
-* A resource (_resource-repo-status_) use a [docker image](https://hub.docker.com/r/dpb587/github-status-resource)
-  that will update your git status for that particular commit.
-* A resource ([_`resource-template`_](https://github.com/JeffDeCola/resource-template))
-  that can be used as a starting point and template for creating other concourse
-  ci resources.
+You can check this docker image,
 
-For more information on using concourse for continuous integration,
-refer to my cheat sheet on [concourse](https://github.com/JeffDeCola/my-cheat-sheets/tree/master/software/operations-tools/continuous-integration-continuous-deployment/concourse-cheat-sheet).
+```bash
+docker images jeffdecola/concourse-deploy-docker-resource
+docker run --name concourse-deploy-docker-resource -dit jeffdecola/concourse-deploy-docker-resource
+docker exec -i -t concourse-deploy-docker-resource /bin/bash
+cd /opt/resource
+tree
+docker logs concourse-deploy-docker-resource
+docker rm -f concourse-deploy-docker-resource
+```
