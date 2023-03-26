@@ -114,8 +114,9 @@ resource_types:
   - name: github-status
     type: docker-image
     source:
-      repository: dpb587/github-status-resource
-      tag: master
+      repository: jeffdecola/github-status-resource
+      tag: main
+      branch: main
 
 #------------------------------------------------------------------------------------------
 resources:
