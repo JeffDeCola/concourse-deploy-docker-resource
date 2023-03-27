@@ -88,7 +88,7 @@ jobs:
               text: "From concourse-deploy-docker-resource: PASSED job-build-push in concourse ci."
           # SEND GITHUB STATUS
           - put: resource-repo-status
-            params: { state: "pending", description: "PASSED job-build-push in concourse ci.", commit: "concourse-deploy-docker-resource" }
+            params: { state: "success", description: "PASSED job-build-push in concourse ci.", commit: "concourse-deploy-docker-resource" }
       
       # TASK FAILURE    
       on_failure:
@@ -114,9 +114,8 @@ resource_types:
   - name: github-status
     type: docker-image
     source:
-      repository: jeffdecola/github-status-resource
-      tag: main
-      branch: main
+      repository: jeffdecola/github-status-resource-clone
+      tag: v0.0.2
 
 #------------------------------------------------------------------------------------------
 resources:
@@ -145,9 +144,10 @@ resources:
     source:
       url: ((slack_url)) 
 
-  - name: resource-repo-status 
+  - name: resource-repo-status
     type: github-status
     icon: github
     source:
       repository: jeffdecola/concourse-deploy-docker-resource 
       access_token: ((repo_github_token))
+      branch: main
