@@ -11,6 +11,7 @@ exec 1>&2           # Redirect all output to stderr for logging
 
 # WHAT IS THIS?
 echo "IN - GET"
+echo " I made the version 0.0.5 to make this easy"
 echo ""
 
 # CURRENT DIRECTORY
@@ -82,7 +83,7 @@ echo "ATC_EXTERNAL_URL = $ATC_EXTERNAL_URL"
 echo ""
 
 echo "PART 2 - GET SOMETHING ************************************************************************"
-echo "Mimic a fetch and place a get_fetched.json file in the working directory"
+echo "Really nothing to get, but I'll get the tag from dockerhub for fun"
 echo "You have the source, params and fectched what you needed"
 echo ""
 
