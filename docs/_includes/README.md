@@ -7,9 +7,11 @@ _A concourse resource to deploy a docker image on a machine via ssh._
 
 ## HOW TO USE
 
-To use this resource in your pipeline, you will need,
+To use this resource in your pipeline, you will provide the following
+dockerhub information in the pipeline,
 
-* {}
+* username: jeffdecola
+* password: ((dockerhub_password))
 
 ```yml
 #------------------------------------------------------------------------------------------
