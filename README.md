@@ -86,7 +86,7 @@ resources:
     icon: github
     source:
       uri: git@github.com:jeffdecola/concourse-deploy-docker-resource.git
-      branch: master
+      branch: main
       private_key: ((git_private_key))
 
   - name: concourse-deploy-docker-resource-test
