@@ -11,6 +11,7 @@ exec 1>&2           # Redirect all output to stderr for logging
 
 # WHAT IS THIS?
 echo "OUT - PUT"
+echo " I made the version 0.0.5 to make this easy"
 echo ""
 
 # CURRENT DIRECTORY
@@ -85,7 +86,7 @@ echo ""
 
 # MIMIC - MUST GET SAME VERSION TO CHECK - THIS IS NOT PASSED
 # **************
-version=1
+version=v0.0.5
 # **************
 
 # MIMIC FETCH - CREATE A JSON FILE

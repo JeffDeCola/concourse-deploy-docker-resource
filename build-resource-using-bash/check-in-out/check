@@ -11,6 +11,7 @@ exec 1>&2           # Redirect all output to stderr for logging
 
 # WHAT IS THIS?
 echo "CHECK"
+echo " I made the version 0.0.5 to make this easy"
 echo ""
 
 # CURRENT DIRECTORY
@@ -38,46 +39,39 @@ echo ""
 # PARSE THE JSON FILE get_input.json 
 source1=$(jq -r .source.source1 < get_input.json)
 source2=$(jq -r .source.source2 < get_input.json)
-source3=$(jq -r .source.source3 < get_input.json)
 input_version=$(jq -r .version.ref < get_input.json)
 
 # PRINT OUT THE INPUT
 echo "source are:"
-echo "    $source1"
-echo "    $source2"
-echo "    $source3"
+echo "    $username"
+echo "    $password"
 echo "version is:"
 echo "    $input_version"
 echo ""
 
 echo "PART 2 - CHECK/UPDATE VERSION *****************************************************************"
-echo "Mimic getting the ver from a source"
 echo "You have the source info and the version"
 echo ""
 
 # Here you would check the version and get the next version
-# I'm just going to mimic it
+# I will just use the version I have
 
-echo "version first time is null"
+# GET DOCKERHUB TOKEN
+TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${username}'", "password": "'${password}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+
+# GET DOCKERHUB TAG
+IMAGE_TAG=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/jeffdecola/concourse-deploy-docker-resource/tags/?page_size=100 | jq -r '.results|.[]|.name')
+echo "The latest version is $IMAGE_TAG"
+echo ""
+
 if [ "$input_version" == "null" ]
 then
-      echo "version is null - set to 0"
-      input_version=0
+    version="0.0.5"
 else
-      echo "version is NOT null - do nothing"
+    version=$input_version
 fi
 
-# NOTE: THIS WILL LOOP TILL VER 5
-echo "LOOP TILL VERSION 5"
-if [ "$input_version" == "4" ]
-then
-      echo "DONE INCREMENTING VERSION"
-      version=$input_version
-else
-      # ADD 1 TO VERSION
-      echo "Add 1 to version"
-      ((version=input_version+1))
-fi
+version=$input_version
 
 echo "The version is $version"
 echo ""
@@ -89,6 +83,7 @@ echo ""
 # CREATE OUTPUT
 json_check_output='[
     { "ref": "'$version'" }
+    {dockerhub_token: "'$dockerhub_token"}
 ]'
 jq -n "$json_check_output" > check_output.json
 

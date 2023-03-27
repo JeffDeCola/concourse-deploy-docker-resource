@@ -57,6 +57,6 @@ resources:
     type: jeffs-resource
     icon: magnify
     source:
-      source1: "source1 info"
-      source2: "source2 info"
-      source3: "source3 info"
+      username: jeffdecola
+      password: ((dockerhub_password))
+
