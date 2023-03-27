@@ -4,7 +4,6 @@ I use concourse ci to,
 
 * Copy and edit `README.md` to `/docs/_includes/README.md` for
   [GitHub Webpage](https://jeffdecola.github.io/concourse-deploy-docker-resource/)
-* TEST code
 * BUILD docker image
 * PUSH to dockerhub
 * Alert me of the progress via repo status and slack

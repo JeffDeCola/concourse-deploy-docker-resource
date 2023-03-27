@@ -10,8 +10,6 @@ _A concourse resource to deploy a docker image on a machine via ssh._
 
 Table of Contents
 
-Table of Contents
-
 * [OVERVIEW](https://github.com/JeffDeCola/concourse-deploy-docker-resource#overview)
 * [HOW TO USE](https://github.com/JeffDeCola/concourse-deploy-docker-resource#how-to-use)
 * [HOW I BUILT AND PUSHED THIS RESOURCE (REFERENCE)](https://github.com/JeffDeCola/concourse-deploy-docker-resource#how-i-built-and-pushed-this-resource-reference)
