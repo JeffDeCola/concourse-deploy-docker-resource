@@ -1,0 +1,20 @@
+# concourse-deploy-docker-resource task-test-concourse-deploy-docker-resource.yml
+
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: golang
+    tag: 1.20.1
+
+inputs:
+  - name: concourse-deploy-docker-resource
+  - name: jeffs-test-resource
+
+outputs:
+  - name: jeffs-test-resource
+
+run:
+  path: ./concourse-deploy-docker-resource/test-this-resource/scripts/test-concourse-deploy-docker-resource.sh
+  # args: [-debug]
