@@ -11,7 +11,7 @@ exec 1>&2           # Redirect all output to stderr for logging
 
 # WHAT IS THIS?
 echo "OUT - PUT"
-echo " I made the version 0.0.5 to make this easy"
+echo "I made the version 0.0.5 to make this easy"
 echo ""
 
 # CURRENT DIRECTORY
@@ -53,22 +53,23 @@ cat put_input.json
 echo ""
 
 # PARSE THE JSON FILE put_input.json 
-source1=$(jq -r .source.source1 < put_input.json)
-source2=$(jq -r .source.source2 < put_input.json)
-source3=$(jq -r .source.source3 < put_input.json)
-param1=$(jq -r .params.param1 < put_input.json)
-param2=$(jq -r .params.param2 < put_input.json)
-param3=$(jq -r .params.param3 < put_input.json)
+username=$(jq -r .source.username < get_input.json)
+password=$(jq -r .source.password < get_input.json)
+
+docker_host_ip=$(jq -r .source.DOCKER_HOST_IP < put_input.json)
+docer_host_port=$(jq -r .source.DOCKER_HOST_PORT < put_input.json)
+docker_host_user=$(jq -r .source.DOCKER_HOST_USER < put_input.json)
+docker_host_ssh_private_key_file=$(jq -r .source.DOCKER_HOST_SSH_PRIVATE_KEY_FILE < put_input.json)
 
 # PRINT OUT THE INPUT
 echo "source are:"
-echo "    $source1"
-echo "    $source2"
-echo "    $source3"
+echo "    $username"
+echo "    $password"
 echo "params are:"
-echo "    $param1"
-echo "    $param2"
-echo "    $param3"
+echo "    $docker_host_ip"
+echo "    $docer_host_port"
+echo "    $docker_host_user"
+echo "    $docker_host_ssh_private_key_file"
 echo ""
 
 # SOME METATDATA
