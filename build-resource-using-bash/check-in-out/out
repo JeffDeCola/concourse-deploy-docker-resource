@@ -70,7 +70,7 @@ echo "params are:"
 echo "    $docker_host_ip"
 echo "    $docer_host_port"
 echo "    $docker_host_user"
-echo "    $docker_host_ssh_private_key_file"
+echo "    docker_host_ssh_private_key_file - See above"
 echo "    $docker_image_to_deploy"
 echo ""
 
@@ -102,20 +102,20 @@ echo "Stop old container if it exists - Ignore if you get an error"
 echo "docker stop $docker_image_to_deploy || true "
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker stop $docker_image_to_deploy || true'
+    'docker stop '$docker_image_to_deploy' || true'
 echo " "
 
 echo "Remove old container if it exsits - Ignore if you get an error"
 echo "docker rm $docker_image_to_deploy || true"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker rm $docker_image_to_deploy || true'
+    'docker rm '$docker_image_to_deploy' || true'
 echo " "
 
 echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy'
+    'docker run --name '$docker_image_to_deploy' -dit jeffdecola/'$docker_image_to_deploy'
 echo " "
 
 echo "rm private-key-file.txt"
