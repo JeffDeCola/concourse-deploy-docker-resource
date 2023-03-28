@@ -1,6 +1,6 @@
 # resource-template Dockerfile used to build docker image on concourse ci
 
-#FROM concourse/buildroot:base
+# FROM concourse/buildroot:base
 FROM alpine
 
 LABEL maintainer="Jeff DeCola https://github.com/JeffDeCola/concourse-deploy-docker-resource"
