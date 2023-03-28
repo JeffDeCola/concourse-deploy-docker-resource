@@ -27,7 +27,7 @@ Documentation and Reference
 
 ## OVERVIEW
 
-_A concourse resource to deploy a docker image on a machine via ssh._
+_A concourse resource to deploy a docker image from dockerhub on a machine via ssh._
 
 ## HOW TO USE
 
