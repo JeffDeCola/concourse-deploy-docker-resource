@@ -10,10 +10,10 @@ image_resource:
 
 inputs:
   - name: concourse-deploy-docker-resource
-  - name: jeffs-test-resource
+  - name: test-resource-deploy-docker
 
 outputs:
-  - name: jeffs-test-resource
+  - name: test-resource-deploy-docker
 
 run:
   path: ./concourse-deploy-docker-resource/test-this-resource/scripts/test-concourse-deploy-docker-resource.sh

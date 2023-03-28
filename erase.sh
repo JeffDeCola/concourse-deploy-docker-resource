@@ -5,8 +5,8 @@
 # Requires 'jq': https://stedolan.github.io/jq/
 
 # set username and password
-UNAME="jeffdecola"
-UPASS="dckr_pat_GG7vu3PtkPkSo50MvfkOi3nGI9c"
+username="jeffdecola"
+password="dckr_pat_GG7vu3PtkPkSo50MvfkOi3nGI9c"
 
 # -------
 
@@ -15,11 +15,13 @@ echo ""
 
 echo "Get tag"
 
-# AQUIRE TOKEN
-TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${UNAME}'", "password": "'${UPASS}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+# GET DOCKERHUB TOKEN
+TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'$username'", "password": "'$password'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
 
-# GET TAG
-#IMAGE_TAG=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/jeffdecola/concourse-deploy-docker-resource/tags/?page_size=100 | jq -r '.results|.[]|.name')
-IMAGE_TAG=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/dpb587/github-status-resource/tags/?page_size=100 | jq -r '.results|.[]|.name')
+# GET DOCKERHUB TAGS
+#IMAGE_TAG=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/$username/concourse-deploy-docker-resource/tags/?page_size=100 | jq -r '.results|.[]|.name')
+IMAGE_TAG=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/$username/github-status-resource-clone/tags/?page_size=100 | jq -r '.results|.[]|.name')
+echo "The latest version is $IMAGE_TAG"
+echo ""
 
-echo ${IMAGE_TAG}
+echo $IMAGE_TAG

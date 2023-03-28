@@ -11,7 +11,7 @@ exec 1>&2           # Redirect all output to stderr for logging
 
 # WHAT IS THIS?
 echo "CHECK"
-echo " I made the version 0.0.5 to make this easy"
+echo "I made the version 0.0.5 to make this easy"
 echo ""
 
 # CURRENT DIRECTORY
@@ -37,8 +37,8 @@ cat get_input.json
 echo ""
 
 # PARSE THE JSON FILE get_input.json 
-source1=$(jq -r .source.source1 < get_input.json)
-source2=$(jq -r .source.source2 < get_input.json)
+username=$(jq -r .source.username < get_input.json)
+password=$(jq -r .source.password < get_input.json)
 input_version=$(jq -r .version.ref < get_input.json)
 
 # PRINT OUT THE INPUT
@@ -56,22 +56,12 @@ echo ""
 # Here you would check the version and get the next version
 # I will just use the version I have
 
-# GET DOCKERHUB TOKEN
-TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${username}'", "password": "'${password}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
-
-# GET DOCKERHUB TAG
-IMAGE_TAG=$(curl -s -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/jeffdecola/concourse-deploy-docker-resource/tags/?page_size=100 | jq -r '.results|.[]|.name')
-echo "The latest version is $IMAGE_TAG"
-echo ""
-
 if [ "$input_version" == "null" ]
 then
     version="0.0.5"
 else
     version=$input_version
 fi
-
-version=$input_version
 
 echo "The version is $version"
 echo ""
@@ -83,8 +73,8 @@ echo ""
 # CREATE OUTPUT
 json_check_output='[
     { "ref": "'$version'" }
-    {dockerhub_token: "'$dockerhub_token"}
 ]'
+
 jq -n "$json_check_output" > check_output.json
 
 echo "json stdout is:"

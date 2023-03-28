@@ -31,11 +31,18 @@ _A concourse resource to deploy a docker image on a machine via ssh._
 
 ## HOW TO USE
 
-To use this resource in your pipeline, you will provide the following
+To use this resource, you will provide the following
 dockerhub information in the pipeline,
 
 * username: jeffdecola
 * password: ((dockerhub_password))
+
+Then you need the machine where you want to deploy the docker image,
+
+* DOCKER_HOST_IP: '192.168.20.122'
+* DOCKER_HOST_PORT: '22'
+* DOCKER_HOST_USER: 'jeffry'
+* DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{docker_host_ssh_private_key_file}}
 
 ```yml
 #------------------------------------------------------------------------------------------

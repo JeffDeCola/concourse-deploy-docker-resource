@@ -13,13 +13,9 @@ jobs:
       trigger: true
 
     # CONCOURSE RESOURCE TEMPLATE
-    - get: jeffs-test-resource
-      params:
-        param1: "get param1"
-        param2: "get param2" 
-        param3: "get param3" 
+    - get: test-resource-deploy-docker
 
-    # RUN TASK IN REPO USING ALPINE DOCKER IMAGE
+    # RUN TASK IN REPO USING ALPINE DOCKER IMAGE (DON'T NEED THIS)
     - task: task-test-concourse-deploy-docker-resource
       file: concourse-deploy-docker-resource/test-this-resource/tasks/task-test-concourse-deploy-docker-resource.yml
 
@@ -27,16 +23,17 @@ jobs:
       on_success:
         do:
           # CONCOURSE RESOURCE TEMPLATE
-          - put: jeffs-test-resource
+          - put: test-resource-deploy-docker
             params:
-              param1: "put param1"
-              param2: "put param2"    
-              param3: "put param3"    
+              DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{docker_host_ssh_private_key_file}}
+              DOCKER_HOST_PORT: '22'
+              DOCKER_HOST_USER: 'jeffry'
+              DOCKER_HOST_IP: '192.168.20.122'
 
 #------------------------------------------------------------------------------------------
 resource_types:
 
-  - name: jeffs-resource
+  - name: deploy-docker
     type: docker-image
     source:
       repository: jeffdecola/concourse-deploy-docker-resource
@@ -53,8 +50,8 @@ resources:
       branch: main
       private_key: ((git_private_key))
       
-  - name: jeffs-test-resource
-    type: jeffs-resource
+  - name: test-resource-deploy-docker
+    type: deploy-docker
     icon: magnify
     source:
       username: jeffdecola
