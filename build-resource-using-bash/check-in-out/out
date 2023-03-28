@@ -57,7 +57,7 @@ username=$(jq -r .source.username < put_input.json)
 password=$(jq -r .source.password < put_input.json)
 
 docker_host_ip=$(jq -r .params.DOCKER_HOST_IP < put_input.json)
-docer_host_port=$(jq -r .params.DOCKER_HOST_PORT < put_input.json)
+docker_host_port=$(jq -r .params.DOCKER_HOST_PORT < put_input.json)
 docker_host_user=$(jq -r .params.DOCKER_HOST_USER < put_input.json)
 docker_host_ssh_private_key_file=$(jq -r .params.DOCKER_HOST_SSH_PRIVATE_KEY_FILE < put_input.json)
 docker_image_to_deploy=$(jq -r .params.DOCKER_IMAGE_TO_DEPLOY < put_input.json)
@@ -68,7 +68,7 @@ echo "    $username"
 echo "    $password"
 echo "params are:"
 echo "    $docker_host_ip"
-echo "    $docer_host_port"
+echo "    $docker_host_port"
 echo "    $docker_host_user"
 echo "    docker_host_ssh_private_key_file - See above"
 echo "    $docker_image_to_deploy"
@@ -92,32 +92,43 @@ echo ""
 version=v0.0.5
 # **************
 
+# PUT PRIVATE KEY IN FILE
 echo "Put private key in temp file"
 echo "$docker_host_ssh_private_key_file" >> private-key-file.txt
 cat private-key-file.txt
 chmod 600 private-key-file.txt
 echo " "
 
+# STOP OLD CONTAINERS IF IT EXISTS ON HOST
 echo "Stop old container if it exists - Ignore if you get an error"
 echo "docker stop $docker_image_to_deploy || true "
 ssh -o StrictHostKeyChecking=no \
-    -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
+    -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
     'docker stop '$docker_image_to_deploy' || true'
 echo " "
 
+# REMOVE OLD CONTAINERS IF IT EXISTS ON HOST
 echo "Remove old container if it exsits - Ignore if you get an error"
 echo "docker rm $docker_image_to_deploy || true"
 ssh -o StrictHostKeyChecking=no \
-    -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
+    -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
     'docker rm '$docker_image_to_deploy' || true'
 echo " "
 
+# DOCKER LOGIN ON HOST
+echo "docker login -u $username -p $password"
+ssh -o StrictHostKeyChecking=no \
+    -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
+    'docker login -u '$username' -p '$password''
+
+# DOCKER RUN ON HOST
 echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
 ssh -o StrictHostKeyChecking=no \
-    -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
+    -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
     'docker run --name '$docker_image_to_deploy' -dit jeffdecola/'$docker_image_to_deploy''
 echo " "
 
+# REMOVE PRIVATE KEY FILE
 echo "rm private-key-file.txt"
 rm private-key-file.txt
 echo " "
