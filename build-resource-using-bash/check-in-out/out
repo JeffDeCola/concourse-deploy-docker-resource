@@ -62,6 +62,10 @@ docker_host_user=$(jq -r .params.DOCKER_HOST_USER < put_input.json)
 docker_host_ssh_private_key_file=$(jq -r .params.DOCKER_HOST_SSH_PRIVATE_KEY_FILE < put_input.json)
 docker_image_to_deploy=$(jq -r .params.DOCKER_IMAGE_TO_DEPLOY < put_input.json)
 
+# GET DOCKERHUB USERNAME AND IMAGENAME
+dockerhub_username=${docker_image_to_deploy%/*}
+dockerhub_imagename=${docker_image_to_deploy#*/}
+
 # PRINT OUT THE INPUT
 echo "source are:"
 echo "    $username"
@@ -72,6 +76,8 @@ echo "    $docker_host_port"
 echo "    $docker_host_user"
 echo "    docker_host_ssh_private_key_file - See above"
 echo "    $docker_image_to_deploy"
+echo "    $dockerhub_username"
+echo "    $dockerhub_imagename"
 echo ""
 
 # SOME METATDATA
@@ -101,18 +107,18 @@ echo " "
 
 # STOP OLD CONTAINERS IF IT EXISTS ON HOST
 echo "Stop old container if it exists - Ignore if you get an error"
-echo "docker stop $docker_image_to_deploy || true "
+echo "docker stop $dockerhub_imagename || true "
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker stop '$docker_image_to_deploy' || true'
+    'docker stop '$dockerhub_imagename' || true'
 echo " "
 
 # REMOVE OLD CONTAINERS IF IT EXISTS ON HOST
 echo "Remove old container if it exsits - Ignore if you get an error"
-echo "docker rm $docker_image_to_deploy || true"
+echo "docker rm $dockerhub_imagename || true"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker rm '$docker_image_to_deploy' || true'
+    'docker rm '$dockerhub_imagename' || true'
 echo " "
 
 # DOCKER LOGIN ON HOST
@@ -124,10 +130,10 @@ echo " "
 
 # DOCKER RUN ON HOST
 echo "docker run"
-echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
+echo "docker run --name $dockerhub_imagename -dit '$dockerhub_username'/$dockerhub_imagename"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker run --name '$docker_image_to_deploy' -dit '$docker_image_to_deploy''
+    'docker run --name '$dockerhub_imagename' -dit '$dockerhub_username'/'$dockerhub_imagename''
 echo " "
 
 # REMOVE PRIVATE KEY FILE
@@ -136,10 +142,10 @@ rm private-key-file.txt
 echo " "
 
 echo "You can now run docker commands such as:"
-echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
-echo "docker exec -i -t $docker_image_to_deploy /bin/bash"
-echo "docker logs $docker_image_to_deploy"
-echo "docker rm -f $docker_image_to_deploy"
+echo "docker run --name $dockerhub_imagename -dit '$dockerhub_username'/$dockerhub_imagename"
+echo "docker exec -i -t $dockerhub_imagename /bin/bash"
+echo "docker logs $dockerhub_imagename"
+echo "docker rm -f $dockerhub_imagename"
 echo " "
 
 author="jeff decola"
