@@ -60,6 +60,7 @@ docker_host_ip=$(jq -r .source.DOCKER_HOST_IP < put_input.json)
 docer_host_port=$(jq -r .source.DOCKER_HOST_PORT < put_input.json)
 docker_host_user=$(jq -r .source.DOCKER_HOST_USER < put_input.json)
 docker_host_ssh_private_key_file=$(jq -r .source.DOCKER_HOST_SSH_PRIVATE_KEY_FILE < put_input.json)
+docker_image_to_deploy=$(jq -r .params.DOCKER_IMAGE_TO_DEPLOY < put_input.json)
 
 # PRINT OUT THE INPUT
 echo "source are:"
@@ -70,6 +71,7 @@ echo "    $docker_host_ip"
 echo "    $docer_host_port"
 echo "    $docker_host_user"
 echo "    $docker_host_ssh_private_key_file"
+echo "    $docker_image_to_deploy"
 echo ""
 
 # SOME METATDATA
@@ -90,7 +92,42 @@ echo ""
 version=v0.0.5
 # **************
 
+echo "Put private key in temp file"
+echo "$docker_host_ssh_private_key_file" >> private-key-file.txt
+cat private-key-file.txt
+chmod 600 private-key-file.txt
+echo " "
 
+echo "Stop old container if it exists - Ignore if you get an error"
+echo "docker stop $docker_image_to_deploy || true "
+ssh -o StrictHostKeyChecking=no \
+    -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
+    'docker stop $docker_image_to_deploy || true'
+echo " "
+
+echo "Remove old container if it exsits - Ignore if you get an error"
+echo "docker rm $docker_image_to_deploy || true"
+ssh -o StrictHostKeyChecking=no \
+    -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
+    'docker rm $docker_image_to_deploy || true'
+echo " "
+
+echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
+ssh -o StrictHostKeyChecking=no \
+    -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
+    'docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy'
+echo " "
+
+echo "rm private-key-file.txt"
+rm private-key-file.txt
+echo " "
+
+echo "You can now run docker commands such as:"
+echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
+echo "docker exec -i -t $docker_image_to_deploy /bin/bash"
+echo "docker logs $docker_image_to_deploy"
+echo "docker rm -f $docker_image_to_deploy"
+echo " "
 
 author="jeff decola"
 
