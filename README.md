@@ -43,7 +43,7 @@ Then define the machine where you want and what dockerhub image to deploy,
 * DOCKER_HOST_PORT: '22'
 * DOCKER_HOST_USER: 'jeffry'
 * DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{docker_host_ssh_private_key_file}}
-* IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
+* DOCKER_IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
 
 The resource is,
 
@@ -75,7 +75,7 @@ And to use as a put,
     DOCKER_HOST_PORT: '22'
     DOCKER_HOST_USER: 'jeffry'
     DOCKER_HOST_IP: '192.168.20.122'
-    IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
+    DOCKER_IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
 ```
 
 ## HOW I BUILT AND PUSHED THIS RESOURCE (REFERENCE)
