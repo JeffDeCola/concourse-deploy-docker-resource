@@ -56,10 +56,10 @@ echo ""
 username=$(jq -r .source.username < put_input.json)
 password=$(jq -r .source.password < put_input.json)
 
-docker_host_ip=$(jq -r .source.DOCKER_HOST_IP < put_input.json)
-docer_host_port=$(jq -r .source.DOCKER_HOST_PORT < put_input.json)
-docker_host_user=$(jq -r .source.DOCKER_HOST_USER < put_input.json)
-docker_host_ssh_private_key_file=$(jq -r .source.DOCKER_HOST_SSH_PRIVATE_KEY_FILE < put_input.json)
+docker_host_ip=$(jq -r .params.DOCKER_HOST_IP < put_input.json)
+docer_host_port=$(jq -r .params.DOCKER_HOST_PORT < put_input.json)
+docker_host_user=$(jq -r .params.DOCKER_HOST_USER < put_input.json)
+docker_host_ssh_private_key_file=$(jq -r .params.DOCKER_HOST_SSH_PRIVATE_KEY_FILE < put_input.json)
 docker_image_to_deploy=$(jq -r .params.DOCKER_IMAGE_TO_DEPLOY < put_input.json)
 
 # PRINT OUT THE INPUT
