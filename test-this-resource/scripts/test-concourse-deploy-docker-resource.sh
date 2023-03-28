@@ -42,8 +42,8 @@ echo ""
 echo "DO SOMETHING -------------------------------------------------------------------------"
 echo " "
 
-echo "cd jeffs-test-resource"
-cd jeffs-test-resource
+echo "cd test-resource-deploy-docker"
+cd test-resource-deploy-docker
 echo "List whats in the current directory"
 ls -la
 echo " "
