@@ -120,7 +120,7 @@ echo "docker login"
 echo "echo password | docker login -u username --password-stdin"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'echo '$password' | docker login -u '$username' --password-stdin'
+    'echo '$password' | docker login -u '$username' --password-stdin || true'
 
 # DOCKER RUN ON HOST
 echo "docker run"
