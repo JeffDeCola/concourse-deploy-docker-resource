@@ -53,8 +53,8 @@ cat put_input.json
 echo ""
 
 # PARSE THE JSON FILE put_input.json 
-username=$(jq -r .source.username < get_input.json)
-password=$(jq -r .source.password < get_input.json)
+username=$(jq -r .source.username < put_input.json)
+password=$(jq -r .source.password < put_input.json)
 
 docker_host_ip=$(jq -r .source.DOCKER_HOST_IP < put_input.json)
 docer_host_port=$(jq -r .source.DOCKER_HOST_PORT < put_input.json)
@@ -81,8 +81,8 @@ echo "ATC_EXTERNAL_URL = $ATC_EXTERNAL_URL"
 echo ""
 
 echo "PART 2 - PUT SOMETHING ************************************************************************"
-echo "Mimic a put and place a put_fetch.json file in the working directory"
-echo "You have the source, params"
+echo "DEPLOY DOCKER IMAGE TO A DOCKER HOST"
+echo "You have the source and params"
 echo ""
 
 # MIMIC - MUST GET SAME VERSION TO CHECK - THIS IS NOT PASSED
@@ -90,31 +90,9 @@ echo ""
 version=v0.0.5
 # **************
 
-# MIMIC FETCH - CREATE A JSON FILE
-json_put_fetch='{
-    "version": { 
-        "ref": "'$version'" 
-    },
-    "author": "Jeff DeCola"
-}'
-jq -n "$json_put_fetch" > put_fetch.json
 
-echo "cat put_fetch.json"
-cat put_fetch.json
-echo ""
 
-# PARSE THE JSON FILE put_fetch.json 
-version=$(jq -r .version.ref < put_fetch.json)
-author=$(jq -r .author < put_fetch.json)
-
-# PRINT OUT THE FETCH
-echo " version      $version"
-echo " author       $author"
-echo ""
-
-echo "ls directory"
-ls -lat 
-echo ""
+author="jeff decola"
 
 echo "PART 3 - OUTPUT *******************************************************************************"
 echo "send stdout"
