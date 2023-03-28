@@ -13,73 +13,45 @@ dockerhub information in the pipeline,
 * username: jeffdecola
 * password: ((dockerhub_password))
 
-Then you need the machine where you want to deploy the docker image,
+Then define the machine where you want and what dockerhub image to deploy,
 
 * DOCKER_HOST_IP: '192.168.20.122'
 * DOCKER_HOST_PORT: '22'
 * DOCKER_HOST_USER: 'jeffry'
 * DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{docker_host_ssh_private_key_file}}
+* IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
+
+The resource is,
 
 ```yml
-#------------------------------------------------------------------------------------------
-jobs:
-
-#**********************************************
-- name: job-test-concourse-deploy-docker-resource
-#**********************************************
-  plan:
-
-    # GET REPO FROM GITHUB
-    - get: concourse-deploy-docker-resource
-      trigger: true
-
-    # CONCOURSE RESOURCE TEMPLATE
-    - get: concourse-deploy-docker-resource-test
-      params:
-        param1: "get param1"
-        param2: "get param2"
-        param3: "get param3"
-
-    # RUN TASK IN REPO USING ALPINE DOCKER IMAGE
-    - task: task-test-concourse-deploy-docker-resource
-      file: concourse-deploy-docker-resource/test-this-resource/tasks/task-test-concourse-deploy-docker-resource.yml
-
-      # TASK SUCCESS
-      on_success:
-        do:
-          # CONCOURSE RESOURCE TEMPLATE
-          - put: concourse-deploy-docker-resource-test
-            params:
-              param1: "put param1"
-              param2: "put param2"
-              param3: "put param3"
-
-#------------------------------------------------------------------------------------------
 resource_types:
 
-  - name: jeffs-resource
+  - name: deploy-docker
     type: docker-image
     source:
       repository: jeffdecola/concourse-deploy-docker-resource
       tag: latest
 
-#------------------------------------------------------------------------------------------
 resources:
 
-  - name: concourse-deploy-docker-resource
-    type: git
-    icon: github
+  - name: test-resource-deploy-docker
+    type: deploy-docker
+    icon: docker
     source:
-      uri: git@github.com:jeffdecola/concourse-deploy-docker-resource.git
-      branch: main
-      private_key: ((git_private_key))
+      username: jeffdecola
+      password: ((dockerhub_password))
+```
 
-  - name: concourse-deploy-docker-resource-test
-    type: jeffs-resource
-    source:
-      source1: "source1 info"
-      source2: "source2 info"
-      source3: "source3 info"
+And to use as a put,
+
+```yml
+- put: test-resource-deploy-docker
+  params:
+    DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{docker_host_ssh_private_key_file}}
+    DOCKER_HOST_PORT: '22'
+    DOCKER_HOST_USER: 'jeffry'
+    DOCKER_HOST_IP: '192.168.20.122'
+    IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
 ```
 
 ## HOW I BUILT AND PUSHED THIS RESOURCE (REFERENCE)
@@ -115,8 +87,6 @@ You can check this docker image,
 docker images jeffdecola/concourse-deploy-docker-resource
 docker run --name concourse-deploy-docker-resource -dit jeffdecola/concourse-deploy-docker-resource
 docker exec -i -t concourse-deploy-docker-resource /bin/bash
-cd /opt/resource
-tree
 docker logs concourse-deploy-docker-resource
 docker rm -f concourse-deploy-docker-resource
 ```
