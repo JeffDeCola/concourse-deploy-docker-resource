@@ -115,7 +115,7 @@ echo " "
 echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docer_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker run --name '$docker_image_to_deploy' -dit jeffdecola/'$docker_image_to_deploy'
+    'docker run --name '$docker_image_to_deploy' -dit jeffdecola/'$docker_image_to_deploy''
 echo " "
 
 echo "rm private-key-file.txt"
