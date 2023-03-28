@@ -116,12 +116,14 @@ ssh -o StrictHostKeyChecking=no \
 echo " "
 
 # DOCKER LOGIN ON HOST
-echo "docker login -u $username -p $password"
+echo "docker login"
+echo "echo password | docker login -u username --password-stdin"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker login -u '$username' -p '$password''
+    'echo '$password' | docker login -u '$username' --password-stdin'
 
 # DOCKER RUN ON HOST
+echo "docker run"
 echo "docker run --name $docker_image_to_deploy -dit jeffdecola/$docker_image_to_deploy"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
