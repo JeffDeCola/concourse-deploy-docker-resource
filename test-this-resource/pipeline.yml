@@ -12,7 +12,7 @@ jobs:
     - get: concourse-deploy-docker-resource
       trigger: true
 
-    # CONCOURSE RESOURCE TEMPLATE
+    # CONCOURSE RESOURCE TEMPLATE (DON'T NEED THIS)
     - get: test-resource-deploy-docker
 
     # RUN TASK IN REPO USING ALPINE DOCKER IMAGE (DON'T NEED THIS)
@@ -29,6 +29,7 @@ jobs:
               DOCKER_HOST_PORT: '22'
               DOCKER_HOST_USER: 'jeffry'
               DOCKER_HOST_IP: '192.168.20.122'
+              IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
 
 #------------------------------------------------------------------------------------------
 resource_types:
@@ -52,8 +53,7 @@ resources:
       
   - name: test-resource-deploy-docker
     type: deploy-docker
-    icon: magnify
+    icon: docker
     source:
       username: jeffdecola
       password: ((dockerhub_password))
-
