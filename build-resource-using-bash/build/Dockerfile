@@ -1,4 +1,4 @@
-# resource-template Dockerfile used to build docker image on concourse ci
+# concourse-deploy-docker-resource
 
 # FROM concourse/buildroot:base
 FROM alpine
@@ -13,6 +13,7 @@ RUN apk add --no-cache curl
 RUN apk add --no-cache git
 RUN apk add --no-cache bash
 RUN apk add --no-cache jq
+RUN apk add --no-cache openssh
 
 # ADD TREE EXECUTABLE
 # Not needed but illustrates how to add a command to build
