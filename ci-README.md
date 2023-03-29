@@ -12,7 +12,7 @@ I use concourse to automate,
 
 The concourse
 [pipeline.yml](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/ci/pipeline.yml)
-shows the entire ci flow. Visually, it looks like,
+shows the entire ci flow,
 
 ![IMAGE - concourse-deploy-docker-resource concourse ci pipeline - IMAGE](docs/pics/concourse-deploy-docker-resource-pipeline.jpg)
 
