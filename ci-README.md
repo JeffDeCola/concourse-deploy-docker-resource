@@ -1,9 +1,9 @@
 # CONCOURSE CONTINUOUS INTEGRATION
 
-I use concourse ci to,
+I use concourse to automate,
 
-* Copy and edit `README.md` to `/docs/_includes/README.md` for
-  [GitHub Webpage](https://jeffdecola.github.io/concourse-deploy-docker-resource/)
+* Use README for
+  [GitHub Webpage](https://jeffdecola.github.io/hello-go-deploy-marathon/)
 * BUILD docker image
 * PUSH to dockerhub
 * Alert me of the progress via repo status and slack
@@ -18,7 +18,7 @@ shows the entire ci flow. Visually, it looks like,
 
 ## JOBS, TASKS AND RESOURCE TYPES
 
-The concourse `jobs` and `tasks` are,
+Concourse Jobs and Tasks
 
 * `job-readme-github-pages` runs task
   [task-readme-github-pages.yml](https://github.com/JeffDeCola/concourse-deploy-docker-resource/blob/master/ci/tasks/task-readme-github-pages.yml)
@@ -29,7 +29,7 @@ The concourse `jobs` and `tasks` are,
   that kicks off shell script
   [build-push.sh](https://github.com/JeffDeCola/concourse-deploy-docker-resource/tree/master/ci/scripts/build-push.sh)
 
-The concourse `resources types` are,
+Concourse Resources
 
 * `concourse-deploy-docker-resource` uses a resource type
   [docker-image](https://hub.docker.com/r/concourse/git-resource/)
@@ -43,7 +43,3 @@ The concourse `resources types` are,
 * `resource-repo-status` uses a resource type
   [docker image](https://hub.docker.com/r/jeffdecola/github-status-resource-clone)
   that will update your git status for that particular commit
-
-For more information on using concourse for continuous integration,
-refer to my
-[concourse-cheat-sheet](https://github.com/JeffDeCola/my-cheat-sheets/tree/master/software/operations/continuous-integration-continuous-deployment/concourse-cheat-sheet).
