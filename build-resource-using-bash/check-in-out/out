@@ -130,10 +130,10 @@ echo " "
 
 # DOCKER RUN ON HOST
 echo "docker run"
-echo "docker run --name $dockerhub_imagename -dit '$dockerhub_username'/$dockerhub_imagename"
+echo "export PATH=\$PATH:/usr/local/bin; docker run --name $dockerhub_imagename -dit '$dockerhub_username'/$dockerhub_imagename"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker run --name '$dockerhub_imagename' -dit '$dockerhub_username'/'$dockerhub_imagename''
+    'export PATH=$PATH:/usr/local/bin; docker run --name '$dockerhub_imagename' -dit '$dockerhub_username'/'$dockerhub_imagename''
 echo " "
 
 # REMOVE PRIVATE KEY FILE
