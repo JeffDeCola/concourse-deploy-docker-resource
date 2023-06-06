@@ -42,6 +42,7 @@ Then define the machine where you want and what dockerhub image to deploy,
 * DOCKER_HOST_IP: '192.168.20.122'
 * DOCKER_HOST_PORT: '22'
 * DOCKER_HOST_USER: 'jeffry'
+* DOCKER_HOST_RUN_PRIVILEGED_MODE: 'true'
 * DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{docker_host_ssh_private_key_file}}
 * DOCKER_IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
 
@@ -71,10 +72,11 @@ And to use as a put,
 ```yml
 - put: test-resource-deploy-docker
   params:
-    DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{docker_host_ssh_private_key_file}}
+    DOCKER_HOST_IP: '192.168.20.122'
     DOCKER_HOST_PORT: '22'
     DOCKER_HOST_USER: 'jeffry'
-    DOCKER_HOST_IP: '192.168.20.122'
+    DOCKER_HOST_RUN_PRIVILEGED_MODE: 'true'
+    DOCKER_HOST_SSH_PRIVATE_KEY_FILE: {{jeffs_mbp_docker_host_ssh_private_key}}
     DOCKER_IMAGE_TO_DEPLOY: 'jeffdecola/crypto-miner-manager'
 ```
 

@@ -59,6 +59,7 @@ password=$(jq -r .source.password < put_input.json)
 docker_host_ip=$(jq -r .params.DOCKER_HOST_IP < put_input.json)
 docker_host_port=$(jq -r .params.DOCKER_HOST_PORT < put_input.json)
 docker_host_user=$(jq -r .params.DOCKER_HOST_USER < put_input.json)
+docker_host_run_priviledged_mode=$(jq -r .params.DOCKER_HOST_RUN_PRIVILEGED_MODE < put_input.json)
 docker_host_ssh_private_key_file=$(jq -r .params.DOCKER_HOST_SSH_PRIVATE_KEY_FILE < put_input.json)
 docker_image_to_deploy=$(jq -r .params.DOCKER_IMAGE_TO_DEPLOY < put_input.json)
 
@@ -74,6 +75,7 @@ echo "params are:"
 echo "    $docker_host_ip"
 echo "    $docker_host_port"
 echo "    $docker_host_user"
+echo "    $docker_host_run_priviledged_mode"
 echo "    docker_host_ssh_private_key_file - See above"
 echo "    $docker_image_to_deploy"
 echo "    $dockerhub_username"
@@ -128,13 +130,23 @@ echo " "
 #     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
 #    'echo '$password' | docker login -u '$username' --password-stdin || true'
 
-# DOCKER RUN ON HOST
-echo "docker run"
-echo "export PATH=\$PATH:/usr/local/bin; docker run --name $dockerhub_imagename -dit '$dockerhub_username'/$dockerhub_imagename"
-ssh -o StrictHostKeyChecking=no \
-    -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'export PATH=$PATH:/usr/local/bin; docker run --name '$dockerhub_imagename' -dit '$dockerhub_username'/'$dockerhub_imagename''
-echo " "
+if [ "$docker_host_run_priviledged_mode" = "true" ]; then
+    # DOCKER RUN ON HOST (PRIVILEDGED MODE)
+    echo "docker run"
+    echo "export PATH=\$PATH:/usr/local/bin; docker run --privileged --name $dockerhub_imagename -dit '$dockerhub_username'/$dockerhub_imagename"
+    ssh -o StrictHostKeyChecking=no \
+        -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
+        'export PATH=$PATH:/usr/local/bin; docker run --privileged --name '$dockerhub_imagename' -dit '$dockerhub_username'/'$dockerhub_imagename''
+    echo " "  
+else
+    # DOCKER RUN ON HOST
+    echo "docker run"
+    echo "export PATH=\$PATH:/usr/local/bin; docker run --name $dockerhub_imagename -dit '$dockerhub_username'/$dockerhub_imagename"
+    ssh -o StrictHostKeyChecking=no \
+        -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
+        'export PATH=$PATH:/usr/local/bin; docker run --name '$dockerhub_imagename' -dit '$dockerhub_username'/'$dockerhub_imagename''
+    echo " "
+fi
 
 # REMOVE PRIVATE KEY FILE
 echo "rm private-key-file.txt"

@@ -127,7 +127,7 @@ resources:
       #uri: https://github.com/jeffdecola/concourse-deploy-docker-resource
       uri: git@github.com:jeffdecola/concourse-deploy-docker-resource.git
       branch: main
-      private_key: ((git_private_key))
+      private_key: ((concourse_git_private_key))
 
   - name: resource-dump-to-dockerhub
     type: docker-image
