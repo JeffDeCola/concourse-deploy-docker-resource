@@ -112,7 +112,7 @@ echo "Stop old container if it exists - Ignore if you get an error"
 echo "docker stop $dockerhub_imagename || true "
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker stop '$dockerhub_imagename' || true'
+    'export PATH=$PATH:/usr/local/bin; docker stop '$dockerhub_imagename' || true'
 echo " "
 
 # REMOVE OLD CONTAINERS IF IT EXISTS ON HOST
@@ -120,7 +120,7 @@ echo "Remove old container if it exsits - Ignore if you get an error"
 echo "docker rm $dockerhub_imagename || true"
 ssh -o StrictHostKeyChecking=no \
     -i private-key-file.txt -p "$docker_host_port" "$docker_host_user"@"$docker_host_ip" \
-    'docker rm '$dockerhub_imagename' || true'
+    'export PATH=$PATH:/usr/local/bin; docker rm '$dockerhub_imagename' || true'
 echo " "
 
 # DOCKER LOGIN ON HOST
