@@ -1,7 +1,7 @@
 # repo-concourse-deploy-docker-resource-.gitignore
 
 # CONCOURSE SECRETS
-.credentials.yml
+.concourse-secrets.yml
 
 # macOS
 .DS_Store
