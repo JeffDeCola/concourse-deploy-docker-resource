@@ -1,10 +1,9 @@
 # CONCOURSE DEPLOY DOCKER RESOURCE
 
 [![Tag Latest](https://img.shields.io/github/v/tag/jeffdecola/concourse-deploy-docker-resource)](https://github.com/JeffDeCola/concourse-deploy-docker-resource/tags)
-[![codeclimate Issue Count](https://codeclimate.com/github/JeffDeCola/concourse-deploy-docker-resource/badges/issue_count.svg)](https://codeclimate.com/github/JeffDeCola/concourse-deploy-docker-resource/issues)
-[![Docker Pulls](https://badgen.net/docker/pulls/jeffdecola/concourse-deploy-docker-resource?icon=docker&label=pulls)](https://hub.docker.com/r/jeffdecola/concourse-deploy-docker-resource/)
-[![MIT License](https://img.shields.io/:license-mit-blue.svg)](https://jeffdecola.mit-license.org)
 [![jeffdecola.com](https://img.shields.io/badge/website-jeffdecola.com-blue)](https://jeffdecola.com)
+[![MIT License](https://img.shields.io/:license-mit-blue.svg)](https://jeffdecola.mit-license.org)
+[![Docker Pulls](https://badgen.net/docker/pulls/jeffdecola/concourse-deploy-docker-resource?icon=docker&label=pulls)](https://hub.docker.com/r/jeffdecola/concourse-deploy-docker-resource/)
 
 _A concourse resource to deploy a dockerhub docker image on a machine via ssh._
 
