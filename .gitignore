@@ -1,4 +1,4 @@
-# repo-concourse-deploy-docker-resource-.gitignore
+# .gitignore
 
 # CONCOURSE SECRETS
 .concourse-secrets.yml
@@ -22,3 +22,5 @@ sftp.json
 # TAR FILES
 *.tar.gz
 *.tar.gz.gpg
+
+# repo-concourse-deploy-docker-resource.gitignore SPECIFIC BELOW ---------------------------------------------
